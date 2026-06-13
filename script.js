@@ -11,26 +11,26 @@ const errorDiv = document.getElementById("error");
 const loading = document.getElementById("loading");
 
 async function fetchWeather(city) {
-
     try {
 
+        // Reset UI
         errorDiv.textContent = "";
         weatherCard.classList.add("hidden");
         loading.classList.remove("hidden");
 
-        // Step 1: Get latitude & longitude
+        // Get city coordinates
         const geoResponse = await fetch(
             `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`
         );
 
         if (!geoResponse.ok) {
-            throw new Error("Geocoding request failed");
+            throw new Error("Failed to fetch city information.");
         }
 
         const geoData = await geoResponse.json();
 
         if (!geoData.results || geoData.results.length === 0) {
-            throw new Error("City not found");
+            throw new Error("❌ City not found. Try another city.");
         }
 
         const location = geoData.results[0];
@@ -38,13 +38,13 @@ async function fetchWeather(city) {
         const latitude = location.latitude;
         const longitude = location.longitude;
 
-        // Step 2: Fetch weather data
+        // Get weather data
         const weatherResponse = await fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m`
         );
 
         if (!weatherResponse.ok) {
-            throw new Error("Weather request failed");
+            throw new Error("Failed to fetch weather data.");
         }
 
         const weatherData = await weatherResponse.json();
@@ -63,32 +63,62 @@ function displayWeather(location, weatherData) {
     cityName.textContent =
         `${location.name}, ${location.country}`;
 
-    temperature.textContent =
-        weatherData.current.temperature_2m;
+    const temp = weatherData.current.temperature_2m;
+    const hum = weatherData.current.relative_humidity_2m;
+    const windSpeed = weatherData.current.wind_speed_10m;
 
-    humidity.textContent =
-        weatherData.current.relative_humidity_2m;
+    temperature.textContent = temp;
+    humidity.textContent = hum;
+    wind.textContent = windSpeed;
 
-    wind.textContent =
-        weatherData.current.wind_speed_10m;
+    const weatherIcon =
+        document.querySelector(".weather-icon");
+
+    // Change emoji based on temperature
+
+    if (temp >= 40) {
+        weatherIcon.textContent = "🔥";
+    }
+    else if (temp >= 30) {
+        weatherIcon.textContent = "☀️";
+    }
+    else if (temp >= 20) {
+        weatherIcon.textContent = "⛅";
+    }
+    else if (temp >= 10) {
+        weatherIcon.textContent = "🌥️";
+    }
+    else {
+        weatherIcon.textContent = "❄️";
+    }
 
     weatherCard.classList.remove("hidden");
 }
 
+// Search Button
 searchBtn.addEventListener("click", () => {
 
     const city = cityInput.value.trim();
 
     if (!city) {
-        errorDiv.textContent = "Please enter a city name";
+        errorDiv.textContent =
+            "⚠️ Please enter a city name.";
         return;
     }
 
     fetchWeather(city);
 });
 
-cityInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
+// Press Enter to Search
+cityInput.addEventListener("keypress", (event) => {
+
+    if (event.key === "Enter") {
         searchBtn.click();
     }
+
+});
+
+// Default city on page load
+window.addEventListener("load", () => {
+    fetchWeather("Chennai");
 });
