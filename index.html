@@ -3,41 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Dashboard</title>
+    <title>🌤️ Real-Time Weather Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <h1>🌤 Weather Dashboard</h1>
+
+        <h1>🌤️ Weather Dashboard 🌈</h1>
+        <p class="subtitle">
+            Get Real-Time Weather Updates From Anywhere In The World 🌍
+        </p>
 
         <div class="search-box">
             <input
                 type="text"
                 id="cityInput"
-                placeholder="Enter city name..."
-            />
-            <button id="searchBtn">Search</button>
+                placeholder="🔍 Enter City Name..."
+            >
+            <button id="searchBtn">🚀 Search</button>
         </div>
 
         <div id="loading" class="hidden">
-            Loading weather data...
+            ⏳ Fetching Live Weather Data...
         </div>
 
         <div id="error" class="error"></div>
 
         <div id="weatherCard" class="weather-card hidden">
-            <h2 id="cityName"></h2>
+
+            <div class="weather-header">
+                <div class="weather-icon">
+                    ☀️
+                </div>
+
+                <h2 id="cityName">City Name</h2>
+            </div>
 
             <div class="weather-info">
-                <p>🌡 Temperature: <span id="temperature"></span> °C</p>
-                <p>💧 Humidity: <span id="humidity"></span>%</p>
-                <p>🌬 Wind Speed: <span id="wind"></span> km/h</p>
-                <p>☁ Condition: <span id="condition"></span></p>
+
+                <div class="info-box">
+                    <h3>🌡️ Temperature</h3>
+                    <p>
+                        <span id="temperature">--</span> °C
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h3>💧 Humidity</h3>
+                    <p>
+                        <span id="humidity">--</span> %
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h3>🌬️ Wind Speed</h3>
+                    <p>
+                        <span id="wind">--</span> km/h
+                    </p>
+                </div>
+
             </div>
+
+            <div class="footer-weather">
+                🌎 Live Data Powered by Open-Meteo API
+            </div>
+
         </div>
+
     </div>
 
-    <script src="script.js"></script>
 </body>
+
+<script src="script.js"></script>
 </html>
